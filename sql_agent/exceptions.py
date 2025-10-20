@@ -1,4 +1,4 @@
-class DatabaseError(Exception):
+class DatabaseFailure(Exception):
     """Raised when the database is not functioning properly."""
     pass
 

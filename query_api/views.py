@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework import status
 
-from sql_agent.exceptions import DatabaseError, AgentFailure
+from sql_agent.exceptions import DatabaseFailure, AgentFailure
 from sql_agent.orchestrator import SyncAgent
 
 from .serializers import QueryRequestSerializer, QueryResponseSerializer
@@ -38,14 +38,14 @@ class QueryAPIView(APIView):
         question = serializer.validated_data['question']
 
         # Create a SQL agent with DB connection and table information
-        sql_agent = SyncAgent(
+        sql_agent = SyncAgent.with_connection_url(
             db_connection_url=get_db_connection_url(),
             db_table_names=('orders', 'products', 'customers')
         )
 
         try:
             answer = sql_agent.ask(question=question)
-        except (DatabaseError, AgentFailure) as e:
+        except (DatabaseFailure, AgentFailure) as e:
             # Handle known agent/database errors
             return Response(
                 QueryResponseSerializer(
