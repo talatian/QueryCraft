@@ -67,7 +67,7 @@ The components work together to transform user questions into SQL queries, execu
 
 3. Start the services:
    ```bash
-   docker-compose up
+   docker compose up
    ```
 
 4. Access the application at `http://localhost:8000`
@@ -86,7 +86,7 @@ The components work together to transform user questions into SQL queries, execu
 To use GPU acceleration for the [Ollama](https://github.com/ollama/ollama):
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.gpu.yml up
+docker compose -f docker-compose.yml -f docker-compose.gpu.yml up
 ```
 
 
