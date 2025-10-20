@@ -4,7 +4,7 @@ The following assumptions were made during the design and implementation of the 
 
 1. **Agent Execution**
    - The agent is assumed to be invoked **synchronously**.
-   - However, the implementation follows **LangChain’s coding style** to enable asynchronous execution with minimal changes if needed.
+   - However, the implementation follows **LangChain’s Runnable** to enable asynchronous execution with minimal changes if needed.
 
 2. **SQL Query Validation**
    - Accurate SQL validation and guaranteed successful execution **cannot be ensured before running the query** on the database.

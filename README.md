@@ -34,7 +34,7 @@ QueryCraft follows a decoupled three-tier architecture with well-defined respons
   * `execution_node`: Executes validated queries against PostgreSQL and handles database errors
   The agent includes a feedback loop allowing iterative refinement of queries based on validation or execution failures.
 
-- **Frontend (`ui`)**: A Django app serving a static HTML interface with JavaScript client-side logic. It presents an input area for questions, displays generated SQL, and renders tabular query results. The frontend communicates with the backend via asynchronous POST requests to `/api/query/`, handling error states and providing example questions.
+- **Frontend (`ui`)**: A Django app serving a static HTML interface with JavaScript client-side logic. It presents an input area for questions, displays generated SQL, and renders tabular query results. The frontend communicates with the backend via POST requests to `/api/query/`, handling error states and providing example questions.
 
 The components work together to transform user questions into SQL queries, execute them safely, and present results through the user interface.
 
@@ -67,7 +67,7 @@ The components work together to transform user questions into SQL queries, execu
 
 3. Start the services:
    ```bash
-   docker-compose up --build
+   docker-compose up
    ```
 
 4. Access the application at `http://localhost:8000`
@@ -86,7 +86,7 @@ The components work together to transform user questions into SQL queries, execu
 To use GPU acceleration for the [Ollama](https://github.com/ollama/ollama):
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.gpu.yml up --build
+docker-compose -f docker-compose.yml -f docker-compose.gpu.yml up
 ```
 
 
