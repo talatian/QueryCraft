@@ -1,0 +1,35 @@
+# GPU-enabled override for QueryCraft
+# Usage: docker compose -f docker-compose.yml -f docker-compose.gpu.yml up
+
+services:
+  ollama:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1  # Use all available GPUs, or specify a number
+              capabilities: [gpu]
+    
+    # Alternative configuration for direct device access (uncomment as needed)
+    # devices:
+    #   - /dev/nvidia0:/dev/nvidia0
+    #   - /dev/nvidiactl:/dev/nvidiactl
+    #   - /dev/nvidia-uvm:/dev/nvidia-uvm
+    # environment:
+    #   - NVIDIA_VISIBLE_DEVICES=all
+    #   - NVIDIA_DRIVER_CAPABILITIES=all
+    
+    # Additional GPU-specific environment variables
+    environment:
+      - OLLAMA_NUM_PARALLEL=1  # Adjust based on your GPU capacity
+      - OLLAMA_MAX_LOADED_MODELS=1  # Adjust based on your GPU memory
+    
+    # Resources limits can be set based on GPU memory
+    # resources:
+    #   limits:
+    #     memory: 8G  # Adjust based on your system
+    #     devices:
+    #       - driver: nvidia
+    #         count: 1
+    #         capabilities: [gpu]

@@ -1,0 +1,63 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      # Django settings
+      - DEBUG=${DEBUG:-1}
+      - SECRET_KEY=${SECRET_KEY}
+
+      # Database settings
+      - DB_NAME=${DB_NAME:-querycraft_db}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_HOST=${DB_HOST:-db}
+      - DB_PORT=${DB_PORT:-5432}
+      
+      # Ollama settings
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434/}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-hf.co/MaziyarPanahi/sqlcoder-7b-2-GGUF:Q4_K_M}
+
+      # Langfuse settings (optional)
+      - LANGFUSE_SECRET_KEY=${LANGFUSE_SECRET_KEY:-}
+      - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY:-}
+      - LANGFUSE_HOST=${LANGFUSE_HOST:-https://cloud.langfuse.com}
+      - LANGFUSE_ENABLED=${LANGFUSE_ENABLED:-false}
+
+    depends_on:
+      - db
+      - ollama
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+
+  db:
+    image: postgres:14
+    environment:
+      - POSTGRES_DB=${DB_NAME:-querycraft_db}
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  ollama:
+    image: ollama/ollama:latest
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-hf.co/MaziyarPanahi/sqlcoder-7b-2-GGUF:Q4_K_M}
+    volumes:
+      - ollama_data:/root/.ollama
+      - ./ollama_entrypoint.sh:/ollama_entrypoint.sh
+    entrypoint: [ "/ollama_entrypoint.sh" ]
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:11434/api/version" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  ollama_data:
