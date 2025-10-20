@@ -31,7 +31,7 @@ class SyncAgent:
             config=RunnableConfig(
                 callbacks=[self.callback_handler],
                 configurable={
-                    "db_connection_url": self.db_connection_url,
+                    "__db_connection_url": self.db_connection_url,
                     "db_table_names": self.db_table_names,
                     "max_generations": self.max_generations,
                     "max_rows": self.max_rows

@@ -22,7 +22,7 @@ def sql_generation_node(state: State, config: RunnableConfig):
 
     # Get the current database schema
     database_schema = extract_table_metadata_ddl(
-        connection_url=config["configurable"]["db_connection_url"],
+        connection_url=config["configurable"]["__db_connection_url"],
         table_names=config["configurable"]["db_table_names"]
     )
 
@@ -50,7 +50,7 @@ def execution_node(state: State, config: RunnableConfig):
 
     try:
         # Create SQLAlchemy engine
-        engine = create_engine(config["configurable"]["db_connection_url"])
+        engine = create_engine(config["configurable"]["__db_connection_url"])
 
         # Execute the query
         with engine.connect() as conn:
