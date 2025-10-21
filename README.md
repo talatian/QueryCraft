@@ -56,7 +56,7 @@ The components work together to transform user questions into SQL queries, execu
 1. Clone the repository:
    ```bash
    git clone <repository-url>
-   cd querycraft
+   cd QueryCraft
    ```
 
 2. Copy the environment template and configure your settings:
@@ -110,3 +110,17 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml up
 | `DJANGO_SUPERUSER_USERNAME` | admin | Username for the Django admin superuser |
 | `DJANGO_SUPERUSER_EMAIL` | admin@example.com | Email for the Django admin superuser |
 | `DJANGO_SUPERUSER_PASSWORD` | admin | Password for the Django admin superuser (change in production) |
+
+## Running Tests
+
+To run the Django tests for this project, use the following command:
+
+```bash
+python manage.py test --verbosity=2
+```
+
+If you're running the application in Docker, you can execute the tests inside the web container:
+
+```bash
+docker compose exec -it web python manage.py test --verbosity=2
+```
