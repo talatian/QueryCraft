@@ -1,0 +1,35 @@
+name: Check Homepage Accessibility
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  check-homepage:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Start services
+      run: |
+        cd $GITHUB_WORKSPACE
+        docker compose up -d
+        sleep 10
+
+    - name: Check if homepage is accessible
+      run: |
+        cd $GITHUB_WORKSPACE
+        # Check if the web service is responding
+        timeout 60 bash -c 'until curl -f http://localhost:8000 > /dev/null 2>&1; do sleep 5; done'
+        echo "Homepage is accessible!"
+        
+    - name: Debug - Check service status
+      if: always()
+      run: |
+        cd $GITHUB_WORKSPACE
+        docker compose ps
+        docker compose logs web
